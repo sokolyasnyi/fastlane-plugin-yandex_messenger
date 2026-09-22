@@ -5,11 +5,17 @@ module Fastlane
   module Actions
     class YandexMessengerAction < Action
       def self.run(params)
-        UI.message("The yandex_messenger plugin is working!")
+        Helper::YandexMessengerHelper.send_text(
+          token: params[:token],
+          text: params[:text],
+          chat_id: params[:chat_id],
+          login: params[:login],
+          important: params[:important]
+        )
       end
 
       def self.description
-        "Allows post messages to telegram channel"
+        "Allows post messages to Yandex Messenger channel"
       end
 
       def self.authors
@@ -17,29 +23,63 @@ module Fastlane
       end
 
       def self.return_value
-        # If your method provides a return value, you can describe here what it does
+        "Parsed JSON response from Yandex Messenger API"
       end
 
       def self.details
-        # Optional:
-        ""
+        'Sends text messages to Yandex Messenger via the bot API. ' \
+        'Provide either chat_id (for group chats) or login (for direct messages), but not both.'
       end
 
       def self.available_options
         [
-          # FastlaneCore::ConfigItem.new(key: :your_option,
-          #                         env_name: "YANDEX_MESSENGER_YOUR_OPTION",
-          #                      description: "A description of your option",
-          #                         optional: false,
-          #                             type: String)
+          FastlaneCore::ConfigItem.new(
+            key: :token,
+            env_name: 'YANDEX_MESSENGER_TOKEN',
+            description: 'OAuth token for Yandex Messenger bot',
+            sensitive: true,
+            type: String,
+            optional: false
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :text,
+            env_name: 'YANDEX_MESSENGER_TEXT',
+            description: 'Message text',
+            type: String,
+            optional: false
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :chat_id,
+            env_name: 'YANDEX_MESSENGER_CHAT_ID',
+            description: 'Chat ID (mutually exclusive with login)',
+            type: String,
+            optional: true,
+            verify_block: proc do |value|
+              UI.user_error!("chat_id cannot be blank") if value.to_s.strip.empty?
+            end
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :login,
+            env_name: 'YANDEX_MESSENGER_LOGIN',
+            description: 'User login for direct messages (mutually exclusive with chat_id)',
+            type: String,
+            optional: true,
+            verify_block: proc do |value|
+              UI.user_error!("login cannot be blank") if value.to_s.strip.empty?
+            end
+          ),
+          FastlaneCore::ConfigItem.new(
+            key: :important,
+            env_name: 'YANDEX_MESSENGER_IMPORTANT',
+            description: 'Mark message as important',
+            type: FastlaneCore::Boolean,
+            optional: true,
+            default_value: false
+          )
         ]
       end
 
       def self.is_supported?(platform)
-        # Adjust this if your plugin only works for a particular platform (iOS vs. Android, for example)
-        # See: https://docs.fastlane.tools/advanced/#control-configuration-by-lane-and-by-platform
-        #
-        # [:ios, :mac, :android].include?(platform)
         true
       end
     end

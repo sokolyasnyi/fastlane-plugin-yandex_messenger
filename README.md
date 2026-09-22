@@ -14,13 +14,19 @@ fastlane add_plugin yandex_messenger
 
 Allows post messages to Yandex Messenger channel
 
-**Note to author:** Add a more detailed description about this plugin here. If your plugin contains multiple actions, make sure to mention them here.
+```ruby
+yandex_messenger(
+  token: ENV['YANDEX_MESSENGER_TOKEN'], # OAuth token for your bot
+  chat_id: ENV['YANDEX_MESSENGER_CHAT_ID'], # Chat ID (mutually exclusive with login)
+  # login: 'john.doe', # User login for direct messages (mutually exclusive with chat_id)
+  text: "Hello world, Yandex Messenger!", # Required
+  important: false # Optional. Mark message as important. Default: false
+)
+```
 
 ## Example
 
 Check out the [example `Fastfile`](fastlane/Fastfile) to see how to use this plugin. Try it by cloning the repo, running `fastlane install_plugins` and `bundle exec fastlane test`.
-
-**Note to author:** Please set up a sample project to make it easy for users to explore what your plugin does. Provide everything that is necessary to try out the plugin in this project (including a sample Xcode/Android project if necessary)
 
 ## Run tests for this plugin
 
