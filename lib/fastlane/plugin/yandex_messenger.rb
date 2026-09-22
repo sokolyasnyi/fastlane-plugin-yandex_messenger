@@ -1,6 +1,9 @@
+# frozen_string_literal: true
+
 require 'fastlane/plugin/yandex_messenger/version'
 
 module Fastlane
+  # Plugin for sending messages via Yandex Messenger bot API.
   module YandexMessenger
     # Return all .rb files inside the "actions" and "helper" directory
     def self.all_classes

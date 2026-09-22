@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 require 'fastlane/action'
 require_relative '../helper/yandex_messenger_helper'
 
 module Fastlane
   module Actions
+    # Fastlane action for posting messages to Yandex Messenger.
     class YandexMessengerAction < Action
       def self.run(params)
         Helper::YandexMessengerHelper.send_text(
@@ -15,15 +18,15 @@ module Fastlane
       end
 
       def self.description
-        "Allows post messages to Yandex Messenger channel"
+        'Allows post messages to Yandex Messenger channel'
       end
 
       def self.authors
-        ["Stanislav Sokolov"]
+        ['Stanislav Sokolov']
       end
 
       def self.return_value
-        "Parsed JSON response from Yandex Messenger API"
+        'Parsed JSON response from Yandex Messenger API'
       end
 
       def self.details
@@ -31,6 +34,7 @@ module Fastlane
         'Provide either chat_id (for group chats) or login (for direct messages), but not both.'
       end
 
+      # rubocop:disable Metrics/MethodLength
       def self.available_options
         [
           FastlaneCore::ConfigItem.new(
@@ -55,7 +59,7 @@ module Fastlane
             type: String,
             optional: true,
             verify_block: proc do |value|
-              UI.user_error!("chat_id cannot be blank") if value.to_s.strip.empty?
+              UI.user_error!('chat_id cannot be blank') if value.to_s.strip.empty?
             end
           ),
           FastlaneCore::ConfigItem.new(
@@ -65,7 +69,7 @@ module Fastlane
             type: String,
             optional: true,
             verify_block: proc do |value|
-              UI.user_error!("login cannot be blank") if value.to_s.strip.empty?
+              UI.user_error!('login cannot be blank') if value.to_s.strip.empty?
             end
           ),
           FastlaneCore::ConfigItem.new(
@@ -78,10 +82,13 @@ module Fastlane
           )
         ]
       end
+      # rubocop:enable Metrics/MethodLength
 
-      def self.is_supported?(platform)
+      # rubocop:disable Naming/PredicateName
+      def self.is_supported?(_platform)
         true
       end
+      # rubocop:enable Naming/PredicateName
     end
   end
 end

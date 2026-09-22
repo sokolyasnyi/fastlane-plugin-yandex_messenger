@@ -1,4 +1,6 @@
-lib = File.expand_path("lib", __dir__)
+# frozen_string_literal: true
+
+lib = File.expand_path('lib', __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'fastlane/plugin/yandex_messenger/version'
 
@@ -9,10 +11,10 @@ Gem::Specification.new do |spec|
   spec.email         = 'stasik_sokolov1899@mail.ru'
 
   spec.summary       = 'Allows post messages to Yandex Messenger channel'
-  spec.homepage      = "https://github.com/sokolyasnyi/fastlane-plugin-yandex_messenger"
-  spec.license       = "MIT"
+  spec.homepage      = 'https://github.com/sokolyasnyi/fastlane-plugin-yandex_messenger'
+  spec.license       = 'MIT'
 
-  spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)
+  spec.files         = Dir['lib/**/*'] + %w[README.md LICENSE]
   spec.require_paths = ['lib']
   spec.metadata['rubygems_mfa_required'] = 'true'
   spec.required_ruby_version = '>= 2.7'

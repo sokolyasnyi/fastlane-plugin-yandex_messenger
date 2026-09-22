@@ -1,9 +1,13 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
+# rubocop:disable Metrics/BlockLength
 describe Fastlane::Actions::YandexMessengerAction do
   let(:token) { 'test_oauth_token' }
   let(:text) { 'Build succeeded!' }
 
+  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
   def mock_http_response(code, body)
     response = instance_double(Net::HTTPResponse)
     allow(response).to receive(:is_a?).with(Net::HTTPSuccess).and_return(code.to_i < 400)
@@ -11,6 +15,7 @@ describe Fastlane::Actions::YandexMessengerAction do
     allow(response).to receive(:body).and_return(body.to_json)
     response
   end
+  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
 
   def stub_http(response)
     http = instance_double(Net::HTTP)
@@ -21,7 +26,7 @@ describe Fastlane::Actions::YandexMessengerAction do
   describe '#run' do
     context 'when sending to chat_id' do
       it 'sends the request and returns parsed response' do
-        response_body = { "message_id" => "123" }
+        response_body = { 'message_id' => '123' }
         stub_http(mock_http_response(200, response_body))
 
         result = Fastlane::Actions::YandexMessengerAction.run(
@@ -36,7 +41,7 @@ describe Fastlane::Actions::YandexMessengerAction do
 
     context 'when sending to login' do
       it 'sends the request successfully' do
-        stub_http(mock_http_response(200, { "message_id" => "456" }))
+        stub_http(mock_http_response(200, { 'message_id' => '456' }))
 
         expect do
           Fastlane::Actions::YandexMessengerAction.run(
@@ -74,7 +79,7 @@ describe Fastlane::Actions::YandexMessengerAction do
 
     context 'when API returns an error' do
       it 'raises an error with status code and body' do
-        stub_http(mock_http_response(401, { "error" => "Unauthorized" }))
+        stub_http(mock_http_response(401, { 'error' => 'Unauthorized' }))
 
         expect do
           Fastlane::Actions::YandexMessengerAction.run(
@@ -88,7 +93,7 @@ describe Fastlane::Actions::YandexMessengerAction do
 
     context 'when important flag is set' do
       it 'passes important: true in request body' do
-        response_body = { "message_id" => "789" }
+        response_body = { 'message_id' => '789' }
         http = instance_double(Net::HTTP)
         captured_request = nil
 
@@ -111,3 +116,4 @@ describe Fastlane::Actions::YandexMessengerAction do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
