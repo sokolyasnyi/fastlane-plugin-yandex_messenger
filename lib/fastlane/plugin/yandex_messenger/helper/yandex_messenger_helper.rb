@@ -14,16 +14,17 @@ module Fastlane
     module YandexMessengerHelper
       class Error < StandardError; end
 
-      ENDPOINT = 'https://botapi.messenger.yandex.net/bot/v1/messages/sendText/'.freeze
+      ENDPOINT = 'https://botapi.messenger.yandex.net/bot/v1/messages/sendText/'
 
       module_function
 
-      # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
+      # rubocop:disable Metrics/MethodLength
       def send_text(token:, text:, chat_id: nil, login: nil, important: false)
         raise Error, 'Provide exactly one of chat_id or login' if [chat_id, login].compact.size != 1
 
         uri = URI(ENDPOINT)
-        request = build_request(uri, token, text, chat_id, login, important)
+        opts = { token: token, text: text, chat_id: chat_id, login: login, important: important }
+        request = build_request(uri, opts)
 
         UI.message('Sending message to Yandex Messenger...')
 
@@ -39,16 +40,16 @@ module Fastlane
 
         handle_response(response)
       end
-      # rubocop:enable Metrics/MethodLength, Metrics/AbcSize
+      # rubocop:enable Metrics/MethodLength
 
-      def build_request(uri, token, text, chat_id, login, important)
+      def build_request(uri, opts)
         request = Net::HTTP::Post.new(uri)
-        request['Authorization'] = "OAuth #{token}"
+        request['Authorization'] = "OAuth #{opts[:token]}"
         request['Content-Type'] = 'application/json'
 
-        body = { text: text, important: important }
-        body[:chat_id] = chat_id if chat_id
-        body[:login] = login if login
+        body = { text: opts[:text], important: opts[:important] }
+        body[:chat_id] = opts[:chat_id] if opts[:chat_id]
+        body[:login] = opts[:login] if opts[:login]
         request.body = JSON.generate(body)
         request
       end

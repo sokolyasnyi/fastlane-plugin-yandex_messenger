@@ -7,7 +7,7 @@ describe Fastlane::Actions::YandexMessengerAction do
   let(:token) { 'test_oauth_token' }
   let(:text) { 'Build succeeded!' }
 
-  # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize
   def mock_http_response(code, body)
     response = instance_double(Net::HTTPResponse)
     allow(response).to receive(:is_a?).with(Net::HTTPSuccess).and_return(code.to_i < 400)
@@ -15,7 +15,7 @@ describe Fastlane::Actions::YandexMessengerAction do
     allow(response).to receive(:body).and_return(body.to_json)
     response
   end
-  # rubocop:enable Metrics/AbcSize, Metrics/MethodLength
+  # rubocop:enable Metrics/AbcSize
 
   def stub_http(response)
     http = instance_double(Net::HTTP)
